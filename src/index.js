@@ -1,4 +1,4 @@
-import { useMemo, useReducer } from "react";
+import { useMemo, useReducer, useState } from "react";
 
 class Governor {
   constructor(contract, dispatch, initialState, middlewares = []) {
@@ -146,11 +146,12 @@ function useGovernor(initialState, contract, middlewares) {
     );
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [initState] = useState(initialState);
+  const [state, dispatch] = useReducer(reducer, initState);
 
   const governor = useMemo(
-    () => new Governor(contract, dispatch, initialState, middlewares),
-    [contract, initialState, middlewares]
+    () => new Governor(contract, dispatch, initState, middlewares),
+    [contract, dispatch, initState, middlewares]
   );
 
   governor.__state = state;
